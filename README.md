@@ -1,44 +1,207 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Odd or Event Guessing App - Using React.js
 
-## Available Scripts
+App will guess if the number inputted is Odd or Even
 
-In the project directory, you can run:
+**Goal:**
 
-### `npm start`
+- Understand how to pass state and props
+- Understand how to pass functions with props
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+**Features:**
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+- Guess the number if divisible by 2 or not
 
-### `npm test`
+**Techs:**
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- React.js
+- CSS
+- HTML
 
-### `npm run build`
+**Assets:**
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Font -
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+**Live links:**
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- Codepen -
+- Hosted with Netlify -
 
-### `npm run eject`
+# Notes
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Prerequisites:
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- Must install Nodejs on your unit
+- Must install NPM on your unit
+- Install create-react-app installed to your node module ( check out [https://github.com/facebook/create-react-app](https://github.com/facebook/create-react-app) for how to install the framework)
+- Have a basic understanding of Javascript (ES6)
+- Have a basic knowledge about React.js framework
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## 1. Initialize State and create our Components
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## App.js
 
-## Learn More
+Let's create are states to our App.js file.
+```javascript
+    import React, { Component } from "react";
+    import Heading from "./components/Heading";
+    import Guesser from "./components/Guesser";
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+    class App extends Component {
+      state = {
+        guess: 0
+      };
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+      render() {
+        return (
+          <div>
+            <Heading />
+            <Guesser />
+          </div>
+        );
+      }
+    }
+
+    export default App;
+```
+## Header.js
+
+here we will display the result of the app.
+```javascript
+    import React from "react";
+
+    const Heading = props => {
+
+      return (
+        <div>
+          <h1>Odd or Even Guessing App</h1>
+          <h2>{/* result of the guess here */}</h2>
+        </div>
+      );
+    };
+
+    export default Heading;
+```
+## Guesser.js
+
+this component is for the input field and buttons of the app.
+```javascript
+    import React, { Component } from "react";
+
+    class Guesser extends Component {
+    	render() {
+        return (
+          <form>
+            <input type="number" name="guess" />
+            <button>Guess!</button>
+          </form>
+        );
+      }
+    }
+
+    export default Guesser;
+```
+## 2. Lets start with passing the value from the input / form
+
+In our Guesser.js we initialize our input to have a ref property for easy passing of value to the state.
+```javascript
+    class Guesser extends Component {
+      numberGuess = React.createRef();
+      render() {
+        return (
+          <form>
+            <input type="number" name="guess" ref={this.numberGuess} />
+            <button>Guess!</button>
+          </form>
+        );
+      }
+    }
+```
+In our App.js lets create a function to handle our setState
+```javascript
+    class App extends Component {
+      state = {
+        guess: 0
+      };
+
+      guessNumber = numberToGuess => {
+        console.log(numberToGuess);
+        this.setState({
+          guess: numberToGuess
+        });
+      };
+
+      render() {
+        return (
+          <div>
+            <Heading/>
+            <Guesser guessNumber={this.guessNumber} />
+          </div>
+        );
+      }
+    }
+```
+We create a function to handle the submit form and apply the guessNumber fn from the App.js so that the new value can be update our state.
+```javascript
+    class Guesser extends Component {
+      numberGuess = React.createRef();
+
+      handleForm = e => {
+        e.preventDefault();
+        this.props.guessNumber(this.numberGuess.current.value);
+      };
+
+      render() {
+        return (
+          <form onSubmit={this.handleForm}>
+            <input type="number" name="guess" ref={this.numberGuess} />
+            <button>Guess!</button>
+          </form>
+        );
+      }
+    }
+```
+## 3. Now we have our state updated, we can now identify if the state new value is odd or even.
+
+Let's first pass the state value into our Heading.js as props.
+```javascript
+    class App extends Component {
+      state = {
+        guess: 0
+      };
+
+      guessNumber = numberToGuess => {
+        console.log(numberToGuess);
+        this.setState({
+          guess: numberToGuess
+        });
+      };
+
+      render() {
+        return (
+          <div>
+            <Heading guess={this.state.guess} />
+            <Guesser guessNumber={this.guessNumber} />
+          </div>
+        );
+      }
+    }
+```
+In our Heading.js let's create a function that validates our state value if odd or even. If the value is even return "Even-steven" and if the value is odd return 'Odd-Todd'
+```javascript
+    const Heading = props => {
+      const changeHeader = number => {
+        if (number % 2 === 0) {
+          return "Even-Steven!!";
+        }
+        return "Odd-Todd!!";
+      };
+
+      return (
+        <div>
+          <h1>Odd or Even Guessing App</h1>
+    			{/* the code below this line: verify if the initial or value of state is equals to 0. If so do not display any result.*/}
+          <h2>{props.guess === 0 ? "" : changeHeader(props.guess)}</h2>
+        </div>
+      );
+    };
+```
