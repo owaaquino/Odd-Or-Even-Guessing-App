@@ -1,4 +1,4 @@
-# Odd or Event Guessing App - Using React.js
+# Odd or Even Guessing App - Using React.js
 
 App will guess if the number inputted is Odd or Even
 
