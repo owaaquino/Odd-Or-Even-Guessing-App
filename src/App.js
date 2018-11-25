@@ -12,7 +12,7 @@ class App extends Component {
   guessNumber = numberToGuess => {
     console.log(numberToGuess);
     this.setState({
-      guess: numberToGuess
+      guess: Math.ceil(numberToGuess)
     });
   };
 

@@ -11,7 +11,11 @@ const Heading = props => {
   return (
     <div>
       <h1>Odd or Even Guessing App</h1>
-      <h2>{props.guess === 0 ? "" : changeHeader(props.guess)}</h2>
+      <h2>
+        {props.guess === 0
+          ? "Please enter a number below"
+          : changeHeader(props.guess)}
+      </h2>
     </div>
   );
 };
