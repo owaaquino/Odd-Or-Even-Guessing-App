@@ -23,8 +23,8 @@ App will guess if the number inputted is Odd or Even
 
 **Live links:**
 
-- Codepen -
 - Hosted with Netlify -
+[https://odd-even-guesser-app.netlify.com/](https://odd-even-guesser-app.netlify.com/)
 
 # Notes
 
